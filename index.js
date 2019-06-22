@@ -26,9 +26,16 @@ const showScans = async (req, res, cb) => {
   const cwd = process.cwd()
   const dirPath = path.join(cwd, req.params.ip, 'scans')
   const dirList = await readDir(dirPath)
-  const htmlArray = await Promise.all(dirList.map(async filename => {
+  const dirFiles = dirList.filter(filename => {
+    const filePath = path.join(dirPath, filename)
+    const stat = fs.statSync(filePath)
+
+    return !stat.isDirectory()
+  })
+  const htmlArray = await Promise.all(dirFiles.map(async filename => {
+    const filePath = path.join(dirPath, filename)
     const heading = `<h2>${filename}</h2>`
-    const text = await readFile(path.join(dirPath, filename))
+    const text = await readFile(filePath)
 
     return `<div>${heading}<pre>${text}</pre></div>`
   }))
