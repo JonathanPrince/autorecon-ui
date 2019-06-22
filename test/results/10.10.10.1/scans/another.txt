@@ -1,0 +1,5 @@
+This is another file with some text in it.
+
+=========================================
+* Isn't it beautiful?                   *
+=========================================
